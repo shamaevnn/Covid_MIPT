@@ -3,6 +3,7 @@ from datetime import date
 import pandas as pd
 import requests
 import json
+import re
 
 
 def problems_with_json(func):
@@ -26,12 +27,11 @@ from_str_date_to_date = {
     }
 
 
-class Covid():
-
+class Covid:
     def __init__(self, country):
         self.country = country
-        url = f'https://www.worldometers.info/coronavirus/country/{self.country.strip().lower()}/'
-        self.source = requests.get(url)
+        self.url = f'https://www.worldometers.info/coronavirus/country/{self.country.strip().lower()}/'
+        self.source = requests.get(self.url)
 
         self.time = []
         self.total_cases = []
@@ -99,23 +99,82 @@ class Covid():
         df.to_csv(f'Data/{self.__class__.__name__}{self.country.capitalize()}.csv', index=False)
 
 
+class CovidUsaStates(Covid):
+    def __init__(self):
+        super().__init__("")
+        all_states_source = requests.get("https://www.worldometers.info/coronavirus/country/us/")
+        self.all_states = list(set(re.findall('="/coronavirus/usa/(\w+-?\w*-?\w*)', all_states_source.text)))
+
+    def write_to_csv(self):
+        data = {}
+        columns = list(filter(lambda key: key in ['time', 'total_cases', 'daily_cases', 'total_currently_infected',
+                                                  'total_death', 'death_per_day', 'new_recoveries'], list(self.__dict__.keys()))) + ['state']
+        df = pd.DataFrame(columns=columns)
+        for state in self.all_states:
+            self.source = requests.get(f'https://www.worldometers.info/coronavirus/usa/{state}/')
+
+            try:
+                self.get_time()
+            except:
+                print(f"probably, invalid link ({state})")
+
+            self.get_total_cases()
+            self.get_daily_cases()
+            self.get_total_currently_infected()
+            self.get_total_death()
+            self.get_death_per_day()
+            self.get_new_recoveries()
+
+            if data.get(state):
+                pass
+            else:
+                data[state] = {}
+
+            df_tmp = pd.DataFrame(columns=columns)
+
+            for key, value in self.__dict__.items():
+                if issubclass(type(value), list) and len(value) and key != 'all_states':
+                    if data[state].get(key):
+                        pass
+                    else:
+                        data[state][key] = ""
+
+                    data[state][key] = value
+
+                    df_tmp[key] = value
+
+            df_tmp['state'] = state
+            df = pd.concat((df, df_tmp))
+
+            data = {}
+            self.time, self.total_death, self.total_cases, self.total_currently_infected, self.death_per_day, \
+                self.new_recoveries, self.daily_cases = [], [], [], [], [], [], []
+
+        df.to_csv('Data/UsaStates.csv', index=False)
+
+
 def main():
     country = sys.argv[1]
 
-    data = Covid(country)
-    try:
-        data.get_time()
-    except :
-        print("probably, invalid link (country)")
-        return
-    data.get_total_cases()
-    data.get_daily_cases()
-    data.get_total_currently_infected()
-    data.get_total_death()
-    data.get_death_per_day()
-    data.get_new_recoveries()
+    if country != 'usa_states':
+        data = Covid(country)
+        try:
+            data.get_time()
+        except:
+            print('probably, invalid link (country)')
+            return
+        data.get_total_cases()
+        data.get_daily_cases()
+        data.get_total_currently_infected()
+        data.get_total_death()
+        data.get_death_per_day()
+        data.get_new_recoveries()
 
-    data.write_to_csv()
+        data.write_to_csv()
+
+    else:
+        data = CovidUsaStates()
+        data.write_to_csv()
 
 
 if __name__ == '__main__':
