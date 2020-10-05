@@ -96,7 +96,7 @@ class Covid():
         for key, value in self.__dict__.items():
             if issubclass(type(value), list) and len(value):
                 df[key] = value
-        df.to_csv(f'{self.__class__.__name__}{self.country.capitalize()}.csv', index=False)
+        df.to_csv(f'Data/{self.__class__.__name__}{self.country.capitalize()}.csv', index=False)
 
 
 def main():
