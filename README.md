@@ -1,6 +1,6 @@
 # Covid_MIPT research of COVID-19 pandemic throughout the World
 
-main.py -- file with parser to extract information from https://www.worldometers.info/coronavirus/:
+main.py -- file with parser to extract information from <a href="https://www.worldometers.info/coronavirus/"> here: </a>
 
 * Example of parsed data about coronavirus in Russia:
 ```python
@@ -14,8 +14,8 @@ Data -- folder that includes parsed data about coronavirus pandemic in different
 
 Russia_regions (in Data folder) -- folder that includes parsed data about coronavirus in russian regions.
 
-covid_stringency_index -- index measuring the stringency of different governments in dealing with pandemic, from 0 (no measures taken) to 100 (most severe restriction imposed). Proposed by Oxford Covid-19 Government Response Tracker. Here you can find more information about it https://github.com/OxCGRT/covid-policy-tracker/blob/master/documentation/index_methodology.md.
+covid_stringency_index -- index measuring the stringency of different governments in dealing with pandemic, from 0 (no measures taken) to 100 (most severe restriction imposed). Proposed by Oxford Covid-19 Government Response Tracker. You can find more information about it <a href="https://github.com/OxCGRT/covid-policy-tracker/blob/master/documentation/index_methodology.md"> here. </a>
 
 population_dict.py -- python dictionary, containing population of different countries.
 
-all_restrictions -- folder with information about restrictions in different countries with 0 - no restrictions imposed, 1 - some restriction are undertaken (measures aimimg to protect vulnerable groups of citizens, etc.), 3 - complete lockdown.
+all_restrictions -- folder with information about restrictions in different countries: 0 - no restrictions, 1 - some restriction are imposed (measures aimimg at protecting vulnerable groups of citizens, etc.), 3 - complete lockdown.
