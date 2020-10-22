@@ -1,6 +1,6 @@
 # Covid_MIPT research of COVID-19 pandemic throughout the World
 
-main.py -- file with parser to extract information from <a href="https://www.worldometers.info/coronavirus/"> here: </a>
+main.py -- file with parser to extract information from <a href="https://www.worldometers.info/coronavirus/"> Worldometer: </a>
 
 * Example of parsed data about coronavirus in Russia:
 ```python
