@@ -14,8 +14,8 @@ python3 main.py usa_states
 
 <b> Russia_regions </b> (in Data folder) -- folder that includes parsed data about coronavirus in russian regions.
 
-<b> covid_stringency_index </b> -- index measuring the stringency of different governments in dealing with pandemic, from 0 (no measures taken) to 100 (most severe restriction imposed). Proposed by Oxford Covid-19 Government Response Tracker. You can find more information about it <a href="https://github.com/OxCGRT/covid-policy-tracker/blob/master/documentation/index_methodology.md"> here. </a>
+<b> all_restrictions </b> -- folder containing information about stringency index of different countries while dealing with covid pandemic. Index vary from 0 (no measures taken) to 100 (most severe restriction imposed). Proposed by Oxford Covid-19 Government Response Tracker. You can find more information about it <a href="https://github.com/OxCGRT/covid-policy-tracker/blob/master/documentation/index_methodology.md"> here. </a> 
 
-<b> population_dict.py </b> -- python dictionary, containing population of different countries.
+<b> population_dict.py </b> -- python dictionary containing population of different countries.
 
-<b> all_restrictions </b> -- folder with information about restrictions in different countries: 0 - no restrictions, 1 - some restriction are imposed (measures aimimg at protecting vulnerable groups of citizens, etc.), 3 - complete lockdown.
+<b> SIR.ipynb </b> -- prototype of SIR (Susceptible, Infectious, Recovered) model.
