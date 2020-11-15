@@ -1,4 +1,4 @@
-# Covid_MIPT research of COVID-19 pandemic throughout the World
+# Covid MIPT research of COVID-19 pandemic throughout the World
 
 <b> parser.py </b> -- file with parser to extract information from <a href="https://www.worldometers.info/coronavirus/"> Worldometer: </a>
 
