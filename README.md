@@ -1,6 +1,6 @@
 # Covid_MIPT research of COVID-19 pandemic throughout the World
 
-<b> main.py </b> -- file with parser to extract information from <a href="https://www.worldometers.info/coronavirus/"> Worldometer: </a>
+<b> parser.py </b> -- file with parser to extract information from <a href="https://www.worldometers.info/coronavirus/"> Worldometer: </a>
 
 * Example of parsing data about coronavirus in Russia:
 ```python
@@ -18,4 +18,11 @@ python3 main.py usa_states
 
 <b> population_dict.py </b> -- python dictionary containing population of different countries.
 
-<b> SIR.ipynb </b> -- prototype of SIR (Susceptible, Infectious, Recovered) model.
+<b> SIR.py </b> -- script which predicts data according to SIR model (Suspected, Infectious, Recovered) and puts results to SIR folder.
+
+* Example of using SIR.py:
+```python
+python3 SIR.py --country germany
+```
+
+<b> SIR </b> -- folder which contains results of SIR.py  model.

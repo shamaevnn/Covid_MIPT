@@ -1,5 +1,6 @@
 population_dict = {'Russia':144_000_000, 
                    'Us':350_000_000,
+                   'Austria': 8_800_000,
                    'Belarus': 9_500_000,
                    'Brazil':209_500_000,
                    'China':1_393_000_000,
