@@ -59,6 +59,19 @@ def extend_index(country_name: str, new_size):
         sys.exit("There is no file {} -- extend_index func".format(file_name))
 
 
+def SIR(state, t, N, beta, gamma):
+    """N - population of country"""
+    S, I, R = state
+
+    dSdt = -beta * S * I / N
+
+    dIdt = beta * S * I / N - gamma * I
+
+    dRdt = gamma * I
+
+    return dSdt, dIdt, dRdt
+
+
 class Learner(object):
     def __init__(self, country, loss, predict_range):
         self.country = country
@@ -74,18 +87,6 @@ class Learner(object):
     def predict(self, beta, gamma, infected, recovered, death, country, s_0, i_0, r_0):
         new_index = extend_index(country, self.predict_range)
         size = len(new_index)
-
-        def SIR(state, t, N, beta, gamma):
-            """N - population of country"""
-            S, I, R = state
-
-            dSdt = -beta * S * I / N
-
-            dIdt = beta * S * I / N - gamma * I
-
-            dRdt = gamma * I
-
-            return dSdt, dIdt, dRdt
 
         extended_actual = np.concatenate((infected, [None] * (size - len(infected))))
         extended_recovered = np.concatenate((recovered, [None] * (size - len(recovered))))
@@ -143,17 +144,6 @@ class Learner(object):
 def loss(point, infected, recovered, s_0, i_0, r_0):
     size = len(infected)
     beta, gamma = point
-
-    def SIR(state, t, N, beta, gamma):
-        S, I, R = state
-
-        dSdt = -beta * S * I / N
-
-        dIdt = beta * S * I / N - gamma * I
-
-        dRdt = gamma * I
-
-        return dSdt, dIdt, dRdt
 
     S, I, R = odeint(SIR, [s_0, i_0, r_0], range(0, size), args=(s_0, beta, gamma)).T
     l1 = np.sqrt(np.mean((I - infected) ** 2) / len(I))
