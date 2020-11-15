@@ -4,11 +4,11 @@
 
 * Example of parsing data about coronavirus in Russia:
 ```python
-python3 main.py russia
+python3 parser.py russia
 ```
 * Example of parsing data about coronavirus in USA by states:
 ```python
-python3 main.py usa_states
+python3 parser.py usa_states
 ```
 <b> Data </b> -- folder that includes parsed data about coronavirus pandemic in different countries.
 
