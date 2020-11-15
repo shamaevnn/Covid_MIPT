@@ -22,7 +22,8 @@ python3 parser.py usa_states
 
 * Example of using SIR.py:
 ```python
-python3 SIR.py --country germany
+python3 SIR.py --countries germany
+python3 SIR.py --countries germany,austria
 ```
 
 <b> SIR </b> -- folder which contains results of SIR.py  model.
