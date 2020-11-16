@@ -33,4 +33,4 @@ python3 benfords_law.py --countries germany
 python3 benfords_law.py --countries germany,austria
 ```
 
-<b> Benford's law </b> -- folder which contains results of benfords_law.py  model.
+<b> Benfords_law </b> -- folder which contains results of benfords_law.py model.

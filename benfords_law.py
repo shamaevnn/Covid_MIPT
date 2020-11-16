@@ -77,7 +77,7 @@ class Benfords_law(object):
         total_cases = covid_country_info['total_cases'].values
         recovered = total_cases - infected
 
-        folder_path = f"Benford's law/{self.country}/"
+        folder_path = f"Benfords_law/{self.country}/"
         os.makedirs(folder_path, exist_ok=True)
 
         labels = []
