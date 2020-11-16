@@ -25,5 +25,12 @@ python3 parser.py usa_states
 python3 SIR.py --countries germany
 python3 SIR.py --countries germany,austria
 ```
-
 <b> SIR </b> -- folder which contains results of SIR.py  model.
+
+* Example of using benfords_law.py:
+```python
+python3 benfords_law.py --countries germany
+python3 benfords_law.py --countries germany,austria
+```
+
+<b> Benford's law </b> -- folder which contains results of benfords_law.py  model.
