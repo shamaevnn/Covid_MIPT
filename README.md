@@ -25,7 +25,9 @@ python3 parser.py usa_states
 python3 SIR.py --countries germany
 python3 SIR.py --countries germany,austria
 ```
-<b> SIR </b> -- folder which contains results of SIR.py  model.
+<b> SIR </b> -- folder which contains results of SIR.py model.
+
+<b> benfords_law </b> -- script which validates data about number of infected people and total number of coronavirus cases in different countries using Benford's law model, puts the results into Benfords_law folder.
 
 * Example of using benfords_law.py:
 ```python
@@ -34,3 +36,13 @@ python3 benfords_law.py --countries germany,austria
 ```
 
 <b> Benfords_law </b> -- folder which contains results of benfords_law.py model.
+
+<b> pearson_test.py </b> -- script which validates factual and predicted data about number of infected and recovered people in different countries using chi-square (χ2) test, puts the results into Pearson folder.
+
+* Example of using pearson_test.py:
+```python
+python3 pearson_test.py --countries germany
+python3 pearson_test.py --countries germany,austria
+```
+
+<b> Pearson </b> -- folder which contains results of pearson_test.py script.
