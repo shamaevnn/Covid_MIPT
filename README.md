@@ -46,3 +46,13 @@ python3 pearson_test.py --countries germany,austria
 ```
 
 <b> Pearson </b> -- folder which contains results of pearson_test.py script.
+
+<b> Spearman_corr.py </b> -- script which calculates Spearman's rank correlation coefficient, the sign of the Spearman correlation indicates the direction of association between variables.
+
+* Example of using Spearman_corr.py:
+```python
+python3 Spearman_corr.py --countries germany
+python3 Spearman_corr.py --countries germany,austria
+```
+
+<b> Spearman </b> -- folder which contains results of Spearman_corr.py script.
