@@ -19,7 +19,7 @@ def trimDataTablesPaths(dataTablesPaths, dirLength):
     result = []
     for path in dataTablesPaths:
         name = path[dirLength+1 :-4]
-        if "Covid" in name:
+        if name[:5] == "Covid":
             name = name[5:]
         result.append(name)
     return result
@@ -42,8 +42,8 @@ import SIR as sir
 def startAnalytics(title, path):
     try:
         benford.Benfords_law(title, path).train()
-    except:
-        print("Error: " + title)
+    except Exception as error:
+        print("Title: " + title + "\tError: " + str(error))
 
 #
 #   GUI Layout
