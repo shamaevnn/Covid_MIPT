@@ -19,9 +19,10 @@ def trimDataTablesPaths(dataTablesPaths, dirLength):
     result = []
     for path in dataTablesPaths:
         name = path[dirLength+1 :-4]
-        if name[:5] == "Covid":
-            name = name[5:]
+        name = name.replace("Covid", "")
+        name = name.replace("/", "_|_")
         result.append(name)
+
     return result
 
 
@@ -32,18 +33,31 @@ dataTables = trimDataTablesPaths(dataTablesPaths, len(dirName))
 #
 #   Run modules
 #
-benfords_law = "./benfords_law.py"
-SIR = "./SIR.py"
-pearson_test_module = "./pearson_test.py"
-spearman_corr = "./Spearman_corr.py"
 import benfords_law as benford
 import SIR as sir
+import pearson_test as pearson
+import Spearman_corr as sperman
 
 def startAnalytics(title, path):
     try:
+        print("Start " + title)
+
         benford.Benfords_law(title, path).train()
+        print("Benford completed")
+
+        sir.Learner(title, path, sir.loss, 140).train()
+        print("SIR completed")
+
+        pearson.Pearson(title)
+        print("Pearson completed")
+
+        sperman.Spearman(title, path).train()
+        print("Spearman completed")
+
+        print(title + " completed\n")
+
     except Exception as error:
-        print("Title: " + title + "\tError: " + str(error))
+        print("Title: " + title + "\tError: " + str(error) + "\n")
 
 #
 #   GUI Layout
