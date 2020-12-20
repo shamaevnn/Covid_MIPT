@@ -69,9 +69,6 @@ class Benfords_law(object):
         self.file_name = file_name
 
     def train(self):
-        print("Benford start")
-        print(self.title)
-        print(self.file_name)
         try:
             covid_country_info = pd.read_csv(str(self.file_name).capitalize())
         except:
