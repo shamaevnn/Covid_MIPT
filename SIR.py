@@ -54,9 +54,9 @@ def parse_arguments():
 
 
 def extend_index(country_name: str, new_size, file_path):
-    file_name = "{}{}.csv".format(file_path, country_name.capitalize())
+    file_name = str(file_path).capitalize()
     try:
-        data = pd.read_csv(file_name)
+        data = pd.read_csv(file_path)
         current = datetime.strptime(data.iloc[0]['time'], '%Y-%m-%d')
         values = np.array([datetime.strftime(current, '%Y-%m-%d')])
         while len(values) < new_size:
@@ -107,11 +107,12 @@ class Learner(object):
         return new_index, extended_actual, extended_recovered, extended_death, S, I, R
 
     def train(self):
-        file_name = "{}{}.csv".format(self.file_path, str(self.country).capitalize())
+        file_path = str(self.file_path).capitalize()
         try:
-            covid_country_info = pd.read_csv(file_name)
+            covid_country_info = pd.read_csv(file_path)
         except:
-            sys.exit("There is no file {} -- train func".format(file_name))
+            sys.exit("There is no file {} -- train func".format(file_path))
+
         death = covid_country_info['total_death'].values
         infected = covid_country_info['total_currently_infected'].values
         total_cases = covid_country_info['total_cases'].values

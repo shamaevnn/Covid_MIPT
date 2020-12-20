@@ -50,7 +50,7 @@ class Spearman(object):
 
     def train(self):
         """ Retrieve Covid Data """
-        file_name = "{}{}.csv".format(self.file_path, str(self.country).capitalize())
+        file_name = str(self.file_path).capitalize()
         try:
             covid_country_info = pd.read_csv(file_name)
         except:
