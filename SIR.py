@@ -25,10 +25,19 @@ def parse_arguments():
         default="")
 
     parser.add_argument(
+        '--file-path',
+        required=False,
+        dest='file_path',
+        help='Destination to file with covid info. Default is Data/Covid',
+        metavar='FILE_PATH',
+        type=str,
+        default="Data/Covid")
+
+    parser.add_argument(
         '--prediction-days',
         required=False,
         dest='predict_range',
-        help='Days to predict with the model. Defaults to 150',
+        help='Days to predict with the model. Defaults to 140',
         metavar='PREDICT_RANGE',
         type=int,
         default=140)
@@ -41,11 +50,11 @@ def parse_arguments():
     except Exception:
         sys.exit("QUIT: countries parameter are not in correct format")
 
-    return country_list, args.predict_range
+    return country_list, args.file_path, args.predict_range
 
 
-def extend_index(country_name: str, new_size):
-    file_name = "Data/Covid{}.csv".format(country_name.capitalize())
+def extend_index(country_name: str, new_size, file_path):
+    file_name = "{}{}.csv".format(file_path, country_name.capitalize())
     try:
         data = pd.read_csv(file_name)
         current = datetime.strptime(data.iloc[0]['time'], '%Y-%m-%d')
@@ -73,8 +82,9 @@ def SIR(state, t, N, beta, gamma):
 
 
 class Learner(object):
-    def __init__(self, country, loss, predict_range):
-        self.country = country
+    def __init__(self, country_name, file_path, loss, predict_range):
+        self.country = country_name
+        self.file_path = file_path
         self.loss = loss
         self.predict_range = predict_range
         self.i_0 = 2
@@ -85,7 +95,7 @@ class Learner(object):
             sys.exit("No info about population for {} in population_dict.py".format(self.country))
 
     def predict(self, beta, gamma, infected, recovered, death, country, s_0, i_0, r_0):
-        new_index = extend_index(country, self.predict_range)
+        new_index = extend_index(country, self.predict_range, self.file_path)
         size = len(new_index)
 
         extended_actual = np.concatenate((infected, [None] * (size - len(infected))))
@@ -97,7 +107,7 @@ class Learner(object):
         return new_index, extended_actual, extended_recovered, extended_death, S, I, R
 
     def train(self):
-        file_name = "Data/Covid{}.csv".format(str(self.country).capitalize())
+        file_name = "{}{}.csv".format(self.file_path, str(self.country).capitalize())
         try:
             covid_country_info = pd.read_csv(file_name)
         except:
@@ -153,10 +163,10 @@ def loss(point, infected, recovered, s_0, i_0, r_0):
 
 
 def main():
-    countries, predict_range = parse_arguments()
+    countries, file_path, predict_range = parse_arguments()
 
     for country in countries:
-        learner = Learner(country, loss, predict_range)
+        learner = Learner(country, file_path, loss, predict_range)
         learner.train()
 
 

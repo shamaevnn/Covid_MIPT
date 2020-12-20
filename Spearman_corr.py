@@ -23,6 +23,15 @@ def parse_arguments():
         type=str,
         default="")
 
+    parser.add_argument(
+        '--file-path',
+        required=False,
+        dest='file_path',
+        help='Destination to file with covid info. Default is Data/Covid',
+        metavar='FILE_PATH',
+        type=str,
+        default="Data/Covid")
+
     args = parser.parse_args()
 
     try:
@@ -31,16 +40,17 @@ def parse_arguments():
     except Exception:
         sys.exit("QUIT: countries parameter are not in correct format")
 
-    return country_list
+    return country_list, args.file_path
 
 
 class Spearman(object):
-    def __init__(self, country):
+    def __init__(self, country, file_path):
         self.country = country
+        self.file_path = file_path
 
     def train(self):
         """ Retrieve Covid Data """
-        file_name = "Data/Covid{}.csv".format(str(self.country).capitalize())
+        file_name = "{}{}.csv".format(self.file_path, str(self.country).capitalize())
         try:
             covid_country_info = pd.read_csv(file_name)
         except:
@@ -121,10 +131,10 @@ class Spearman(object):
 
 
 def main():
-    countries = parse_arguments()
+    countries, file_path = parse_arguments()
 
     for country in countries:
-        spearman_corr = Spearman(country)
+        spearman_corr = Spearman(country, file_path)
         spearman_corr.train()
 
 
