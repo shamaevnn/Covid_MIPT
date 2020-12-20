@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 from scipy.integrate import odeint
 from scipy.optimize import minimize
 from population_dict import population_dict
+from scipy.stats import chisquare
 import argparse
 import sys
 import os
@@ -63,21 +64,27 @@ def distribution_of_digits(array):
 
 
 class Benfords_law(object):
-    def __init__(self, country):
-        self.country = country
+    def __init__(self, title, file_name):
+        self.title = title
+        self.file_name = file_name
 
     def train(self):
-        file_name = "Data/Covid{}.csv".format(str(self.country).capitalize())
+        print("Benford start")
+        print(self.title)
+        print(self.file_name)
         try:
-            covid_country_info = pd.read_csv(file_name)
+            covid_country_info = pd.read_csv(str(self.file_name).capitalize())
         except:
+            print("File error")
             sys.exit("There is no file {} -- train func".format(file_name))
+
         death = covid_country_info['total_death'].values
         infected = covid_country_info['total_currently_infected'].values
         total_cases = covid_country_info['total_cases'].values
+        daily_cases = covid_country_info['daily_cases'].values
         recovered = total_cases - infected
 
-        folder_path = f"Benfords_law/{self.country}/"
+        folder_path = f"Benfords_law/{self.title}/"
         os.makedirs(folder_path, exist_ok=True)
 
         labels = []
@@ -87,12 +94,13 @@ class Benfords_law(object):
 
         total_cases_distribution = distribution_of_digits(total_cases)
         infected_distribution = distribution_of_digits(infected)
+        daily_cases_distribution = distribution_of_digits(daily_cases)
 
         x = np.arange(len(labels)) 
         width = 0.4
         fig, ax = plt.subplots()
         ax.plot(benfords_law_distribution, color='#00D0D0', linewidth=6, label="Benford's law")
-        ax.bar(x + width/2, total_cases_distribution, width, label="Total cases")
+        ax.bar(x + width/2, daily_cases_distribution, width, label="Daily cases")
         ax.bar(x - width/2, infected_distribution, width, label="Infected")
 
         ax.set_ylabel('First digit distribution')
@@ -100,18 +108,22 @@ class Benfords_law(object):
         ax.set_xticklabels(labels)
         ax.legend()
 
-        plt.title(self.country) 
+        plt.title(self.title) 
         
-        fig.savefig(folder_path + f"{self.country}.png")
+        fig.savefig(folder_path + f"{self.title}.png")
+
+#   TODO: upload data to csv
+        daily_cases_inf = chisquare(f_obs=daily_cases_distribution, f_exp=benfords_law_distribution)
+        print("daily cases -- χ² statistic, p-value: ", daily_cases_inf)
+
+#   TODO: It does not work for common program - needs to be discussed
+# def main():
+#     countries, predict_range = parse_arguments()
+
+#     for country in countries:
+#         benford = Benfords_law(country)
+#         benford.train()
 
 
-def main():
-    countries, predict_range = parse_arguments()
-
-    for country in countries:
-        benford = Benfords_law(country)
-        benford.train()
-
-
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
