@@ -6,6 +6,7 @@ from scipy.integrate import odeint
 from scipy.optimize import minimize
 from population_dict import population_dict
 from scipy.stats import chisquare
+import scipy.stats as stats
 import argparse
 import sys
 import os
@@ -64,8 +65,8 @@ def distribution_of_digits(array):
 
 
 class Benfords_law(object):
-    def __init__(self, title, file_name):
-        self.title = title
+    def __init__(self, country, file_name):
+        self.country = country
         self.file_name = file_name
 
     def train(self):
@@ -75,13 +76,11 @@ class Benfords_law(object):
             print("File error")
             sys.exit("There is no file {} -- train func".format(file_name))
 
-        death = covid_country_info['total_death'].values
-        infected = covid_country_info['total_currently_infected'].values
-        total_cases = covid_country_info['total_cases'].values
+        death_per_day = covid_country_info['death_per_day'].values
+        total_currently_infected = covid_country_info['total_currently_infected'].values
         daily_cases = covid_country_info['daily_cases'].values
-        recovered = total_cases - infected
 
-        folder_path = f"Benfords_law/{self.title}/"
+        folder_path = f"Benfords_law/{self.country}/"
         os.makedirs(folder_path, exist_ok=True)
 
         labels = []
@@ -89,29 +88,54 @@ class Benfords_law(object):
             labels.append(str(i))
         benfords_law_distribution = [0.301, 0.176, 0.125, 0.097, 0.079, 0.067, 0.058, 0.051, 0.046]
 
-        total_cases_distribution = distribution_of_digits(total_cases)
-        infected_distribution = distribution_of_digits(infected)
+        death_distribution = distribution_of_digits(death_per_day)
+        infected_distribution = distribution_of_digits(total_currently_infected)
         daily_cases_distribution = distribution_of_digits(daily_cases)
 
         x = np.arange(len(labels)) 
-        width = 0.4
+        width = 0.6
         fig, ax = plt.subplots()
         ax.plot(benfords_law_distribution, color='#00D0D0', linewidth=6, label="Benford's law")
-        ax.bar(x + width/2, daily_cases_distribution, width, label="Daily cases")
-        ax.bar(x - width/2, infected_distribution, width, label="Infected")
+        ax.bar(x - width/3, daily_cases_distribution, width/3, label="Daily cases")
+        ax.bar(x, infected_distribution, width/3, label="Infected")
+        ax.bar(x + width/3, death_distribution, width/3, label="Daily death cases")
 
         ax.set_ylabel('First digit distribution')
         ax.set_xticks(x)
         ax.set_xticklabels(labels)
         ax.legend()
 
-        plt.title(self.title) 
+        plt.title(self.country) 
         
-        fig.savefig(folder_path + f"{self.title}.png")
+        fig.savefig(folder_path + f"{self.country}.png")
 
-#   TODO: upload data to csv
+        #   Pearson test
+        """ Degrees of freedom """
+        df = len(benfords_law_distribution) - 1
+        
         daily_cases_inf = chisquare(f_obs=daily_cases_distribution, f_exp=benfords_law_distribution)
-        print("daily cases -- χ² statistic, p-value: ", daily_cases_inf)
+        infected_inf = chisquare(f_obs=infected_distribution, f_exp=benfords_law_distribution)
+        daily_death_inf = chisquare(f_obs=death_distribution, f_exp=benfords_law_distribution)
+
+        critical_value = stats.chi2.ppf(q=0.95, df=df)
+
+        daily_cases_validation = False if daily_cases_inf.statistic > critical_value else True
+        infected_validation = False if infected_inf.statistic > critical_value else True
+        daily_death_validation = False if daily_death_inf.statistic > critical_value else True
+
+        fin_data = {
+            'daily_cases_statistic': daily_cases_inf.statistic,
+            'infected_statistic': infected_inf.statistic,
+            'daily_death_statistic': daily_death_inf.statistic,
+            'daily_cases_validation': infected_validation,
+            'infected_validation': daily_death_validation,
+            'daily_death_validation': daily_cases_validation,
+            }
+
+        os.makedirs(folder_path, exist_ok=True)
+        with open(folder_path + f'PearsonBenfordsLaw{self.country}.json', 'w') as outfile:
+            json.dump(fin_data, outfile, indent=4)
+        
 
 #   TODO: It does not work for common program - needs to be discussed
 # def main():
@@ -120,7 +144,6 @@ class Benfords_law(object):
 #     for country in countries:
 #         benford = Benfords_law(country)
 #         benford.train()
-
 
 # if __name__ == '__main__':
 #     main()
