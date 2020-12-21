@@ -101,11 +101,11 @@ def aggregateDataToCommonCsv():
     pd.DataFrame(benfordCommonData).to_csv(f"./{commonDataFolderName}/BenfordsLawCommon.csv")
 
     sirJsonFiles = getJsonsByPattern("PearsonSIR")
-    sirCommonData = aggregateDataFromJsonFiles(benfordJsonFiles)
+    sirCommonData = aggregateDataFromJsonFiles(sirJsonFiles)
     pd.DataFrame(sirCommonData).to_csv(f"./{commonDataFolderName}/SirCommon.csv")
     
     spearmanJsonFiles = getJsonsByPattern("Spearman")
-    spearmanCommonData = aggregateDataFromJsonFiles(benfordJsonFiles)
+    spearmanCommonData = aggregateDataFromJsonFiles(spearmanJsonFiles)
     pd.DataFrame(spearmanCommonData).to_csv(f"./{commonDataFolderName}/SpearmanCommon.csv")
 
 #
