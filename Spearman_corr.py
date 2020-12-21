@@ -65,8 +65,9 @@ class Spearman(object):
         try:
             stringency_country_info = pd.read_csv(restr_file)
         except:
-            sys.exit("There is no file {} -- train func // all_restrictions".format(file_name))
-
+            print("There is no file {} -- train func // all_restrictions".format(file_name))
+            return
+            
         index = stringency_country_info['Stringency Index (OxBSG)'].values
 
         """ Time Lag 14 Days """
@@ -124,7 +125,7 @@ class Spearman(object):
 
         folder_path = f'Spearman/{self.country}/'
         os.makedirs(folder_path, exist_ok=True)
-        with open(folder_path + f'data.json', 'w') as outfile:
+        with open(folder_path + f'Spearman{self.country}.json', 'w') as outfile:
             json.dump(data, outfile, indent=4)
         fig.savefig(folder_path + f"infected{self.country}.png")
         fig_d.savefig(folder_path + f"death{self.country}.png")

@@ -39,12 +39,12 @@ class Pearson(object):
 
     def train(self):
         file_name = "SIR/{}/data.json".format(str(self.country))
-
         try:
             with open(file_name) as json_file:
                 data = json.load(json_file)
         except:
-            sys.exit("There is no file {} -- train func".format(file_name))
+            print("There is no file {} -- train func".format(file_name))
+            return
 
         """ Deleted the first day to get rid of ZEROs """
         inf_fact_data = np.asarray(data['fact_infected'][1:])
@@ -82,12 +82,17 @@ class Pearson(object):
         else:
             recovered_validation = True
 
-        fin_data = {'infected_validation': infected_validation,
-                'recovered_validation': recovered_validation}
+        fin_data = {
+            'critical_value': critical_value,
+            'infected_statistic': chi_inf.statistic,
+            'recovered_statistic': chi_rec.statistic,
+            'infected_validation': infected_validation,
+            'recovered_validation': recovered_validation
+            }
 
-        folder_path = f'Pearson/{self.country}/'
+        folder_path = f"SIR/{self.country}/"
         os.makedirs(folder_path, exist_ok=True)
-        with open(folder_path + f'val_data.json', 'w') as outfile:
+        with open(folder_path + f'PearsonSIR{self.country}.json', 'w') as outfile:
             json.dump(fin_data, outfile, indent=4)
 
 
