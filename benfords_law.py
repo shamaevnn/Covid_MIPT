@@ -123,11 +123,14 @@ class Benfords_law(object):
 
         df = len(benfords_law_distribution) - 1
         critical_value = stats.chi2.ppf(q=0.99, df=df)
+        print("Critical value: ", critical_value)
+
         daily_cases_validation = False if daily_cases_inf.statistic > critical_value else True
         infected_validation = False if infected_inf.statistic > critical_value else True
         daily_death_validation = False if daily_death_inf.statistic > critical_value else True
 
         fin_data = {
+            'critical_value': critical_value,
             'daily_cases_statistic': daily_cases_inf.statistic,
             'infected_statistic': infected_inf.statistic,
             'daily_death_statistic': daily_death_inf.statistic,

@@ -83,6 +83,7 @@ class Pearson(object):
             recovered_validation = True
 
         fin_data = {
+            'critical_value': critical_value,
             'infected_statistic': chi_inf.statistic,
             'recovered_statistic': chi_rec.statistic,
             'infected_validation': infected_validation,
