@@ -1,0 +1,9 @@
+{
+    "critical_value": 20.090235029663233,
+    "daily_cases_statistic": 89.73103658725378,
+    "infected_statistic": 58.7488538481543,
+    "daily_death_statistic": 150.47088919691404,
+    "daily_cases_validation": false,
+    "infected_validation": false,
+    "daily_death_validation": false
+}

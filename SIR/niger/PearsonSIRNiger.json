@@ -1,0 +1,7 @@
+{
+    "critical_value": 285.73393991823343,
+    "infected_statistic": 146.30717692031942,
+    "recovered_statistic": 19.29513834117108,
+    "infected_validation": true,
+    "recovered_validation": true
+}
