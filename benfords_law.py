@@ -110,15 +110,19 @@ class Benfords_law(object):
         fig.savefig(folder_path + f"{self.country}.png")
 
         #   Pearson test
-        """ Degrees of freedom """
-        df = len(benfords_law_distribution) - 1
+        daily_cases_len = len(daily_cases)
+        total_currently_infected_len = len(total_currently_infected)
+        death_per_day_len = len(death_per_day)
         
-        daily_cases_inf = chisquare(f_obs=daily_cases_distribution, f_exp=benfords_law_distribution)
-        infected_inf = chisquare(f_obs=infected_distribution, f_exp=benfords_law_distribution)
-        daily_death_inf = chisquare(f_obs=death_distribution, f_exp=benfords_law_distribution)
+        daily_cases_inf = chisquare(f_obs=daily_cases_distribution*daily_cases_len,
+                                    f_exp=benfords_law_distribution*daily_cases_len)
+        infected_inf = chisquare(f_obs=infected_distribution*total_currently_infected_len,
+                                    f_exp=benfords_law_distribution*total_currently_infected_len)
+        daily_death_inf = chisquare(f_obs=death_distribution*death_per_day_len,
+                                    f_exp=benfords_law_distribution*death_per_day_len)
 
-        critical_value = stats.chi2.ppf(q=0.95, df=df)
-
+        df = len(benfords_law_distribution) - 1
+        critical_value = stats.chi2.ppf(q=0.99, df=df)
         daily_cases_validation = False if daily_cases_inf.statistic > critical_value else True
         infected_validation = False if infected_inf.statistic > critical_value else True
         daily_death_validation = False if daily_death_inf.statistic > critical_value else True
